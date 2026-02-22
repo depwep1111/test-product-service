@@ -16,7 +16,15 @@ spec:
         - name: product-service
           image: tranthanhvt0982/test-product-service:latest
           ports:
-            - containerPort: 8082
+            - containerPort: 8083
+              name: http
+            - containerPort: 9083
+              name: http-admin
+          livenessProbe:
+            httpGet:
+              path: "/healthcheck"
+              port: http-admin
+            initialDelaySeconds: 60
 ---
 apiVersion: v1
 kind: Service
@@ -28,3 +36,9 @@ spec:
   ports:
     - port: 8083
       targetPort: 8083
+    - name: "http"
+      port: 8083
+      targetPort: "http"
+    - name: "http-admin"
+      port: 9083
+      targetPort: "http-admin"
